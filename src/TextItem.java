@@ -30,56 +30,64 @@ public class TextItem extends SlideItem {
 	private static final String EMPTYTEXT = "No Text Given";
 
 //A textitem of int level with text string
-	public TextItem(int level, String string) {
+	public TextItem(int level, String string)
+	{
 		super(level);
 		this.text = string;
 	}
 
 //An empty textitem
-	public TextItem() {
+	public TextItem()
+	{
 		this(0, EMPTYTEXT);
 	}
 
 //Returns the text
-	public String getText() {
+	public String getText()
+	{
 		return this.text == null ? "" : this.text;
 	}
 
 //Returns the AttributedString for the Item
-	public AttributedString getAttributedString(Style style, float scale) {
+	public AttributedString getAttributedString(Style style, float scale)
+	{
 		AttributedString attrStr = new AttributedString(getText());
 		attrStr.addAttribute(TextAttribute.FONT, style.getFont(scale), 0, this.text.length());
 		return attrStr;
 	}
 
 //Returns the bounding box of an Item
-	public Rectangle getBoundingBox(Graphics g, ImageObserver observer, 
-			float scale, Style myStyle) {
+	public Rectangle getBoundingBox(Graphics g, ImageObserver observer, float scale, Style myStyle)
+	{
 		List<TextLayout> layouts = getLayouts(g, myStyle, scale);
-		int xsize = 0, ysize = (int) (myStyle.getLeading() * scale);
+		int xsize = 0;
+		int ysize = (int) (myStyle.getLeading() * scale);
+
 		Iterator<TextLayout> iterator = layouts.iterator();
-		while (iterator.hasNext()) {
+		while (iterator.hasNext())
+		{
 			TextLayout layout = iterator.next();
 			Rectangle2D bounds = layout.getBounds();
-			if (bounds.getWidth() > xsize) {
+			if (bounds.getWidth() > xsize)
+			{
 				xsize = (int) bounds.getWidth();
 			}
-			if (bounds.getHeight() > 0) {
+			if (bounds.getHeight() > 0)
+			{
 				ysize += bounds.getHeight();
 			}
 			ysize += layout.getLeading() + layout.getDescent();
 		}
-		return new Rectangle((int) (myStyle.getIndent() * scale), 0, xsize, ysize );
+		return new Rectangle((int)(myStyle.getIndent() * scale), 0, xsize, ysize );
 	}
 
 //Draws the item
-	public void draw(int x, int y, float scale, Graphics g,
-			Style myStyle, ImageObserver o)
+	public void draw(int x, int y, float scale, Graphics g, Style myStyle, ImageObserver o)
 	{
-		if (this.text == null || this.text.length() == 0) {
+		if (this.text == null || this.text.length() == 0)
+		{
 			return;
 		}
-
 		List<TextLayout> layouts = getLayouts(g, myStyle, scale);
 		Point pen = new Point(x + (int)(myStyle.getIndent() * scale),
 				y + (int) (myStyle.getLeading() * scale));
@@ -87,7 +95,9 @@ public class TextItem extends SlideItem {
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setColor(myStyle.getColor());
 		Iterator<TextLayout> it = layouts.iterator();
-		while (it.hasNext()) {
+
+		while (it.hasNext())
+		{
 			TextLayout layout = it.next();
 			pen.y += layout.getAscent();
 			layout.draw(g2d, pen.x, pen.y);

@@ -56,31 +56,6 @@ public class XMLAccessor extends Accessor
 	public void loadFile(Presentation presentation, String filename)
 	{
 		Element element = null;
-		/*
-		int slideNumber, itemNumber, totalSlides, maxItem;
-		try {
-
-			Element doc = documentBuilder(filename);
-			presentation.setTitle(getTitle(doc, SHOWTITLE));
-			NodeList slides = doc.getElementsByTagName(SLIDE);
-
-			totalSlides = slides.getLength();
-			for(slideNumber = 0;slideNumber < totalSlides; slideNumber++)
-			{
-				Element xmlSlide = (Element) slides.item(slideNumber);
-				Slide slide = new Slide();
-				slide.setTitle(getTitle(xmlSlide, SLIDETITLE));
-				presentation.append(slide);
-				NodeList slideItems = xmlSlide.getElementsByTagName(ITEM);
-				maxItem = slideItems.getLength();
-				for(itemNumber = 0; itemNumber < maxItem; itemNumber++)
-				{
-					Element item = (Element) slideItems.item(itemNumber);
-					loadSlideItem(slide, item);
-				}
-			}
-		}
-		*/
 		try
 		{
 			element = documentBuilder(filename);
@@ -176,36 +151,7 @@ public class XMLAccessor extends Accessor
 		NamedNodeMap attributes = item.getAttributes();
 		int level = this.levelText(attributes);
 		this.appendTextItem(slide,attributes,item,level);
-		/*
-		String leveltext = attributes.getNamedItem(LEVEL).getTextContent();
-		if (leveltext != null)
-		{
-			try
-			{
-				level = Integer.parseInt(leveltext);
-			}
-			catch(NumberFormatException x)
-			{
-				System.err.println(NFE);
-			}
-		}
-		String type = attributes.getNamedItem(KIND).getTextContent();
-		if (TEXT.equals(type))
-		{
-			slide.append(new TextItem(level, item.getTextContent()));
-		}
-		else
-		{
-			if (IMAGE.equals(type))
-			{
-				slide.append(new BitmapItem(level, item.getTextContent()));
-			}
-			else
-			{
-				System.err.println(UNKNOWNTYPE);
-			}
-		}
-		 */
+
 	}
 
 	public void saveFile(Presentation presentation, String filename) throws IOException

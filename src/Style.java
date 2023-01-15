@@ -49,24 +49,29 @@ public class Style {
 		this.font = new Font(FONTNAME, Font.BOLD, fontSize=points);
 		this.leading = leading;
 	}
-	public int getIndent() {
-		return indent;
+	public int getIndent()
+	{
+		return this.indent;
 	}
 
-	public void setIndent(int indent) {
+	public void setIndent(int indent)
+	{
 		this.indent = indent;
 	}
 
-	public Color getColor() {
-		return color;
+	public Color getColor()
+	{
+		return this.color;
 	}
 
-	public void setColor(Color color) {
+	public void setColor(Color color)
+	{
 		this.color = color;
 	}
 
-	public Font getFont(float scale) {
-		return font.deriveFont(fontSize * scale);
+	public Font getFont(float scale)
+	{
+		return this.font.deriveFont(fontSize * scale);
 	}
 
 	public void setFont(Font font)
@@ -74,19 +79,23 @@ public class Style {
 		this.font = font;
 	}
 
-	public int getFontSize() {
-		return fontSize;
+	public int getFontSize()
+	{
+		return this.fontSize;
 	}
 
-	public void setFontSize(int fontSize) {
+	public void setFontSize(int fontSize)
+	{
 		this.fontSize = fontSize;
 	}
 
-	public int getLeading() {
-		return leading;
+	public int getLeading()
+	{
+		return this. leading;
 	}
 
-	public void setLeading(int leading) {
+	public void setLeading(int leading)
+	{
 		this.leading = leading;
 	}
 
@@ -94,9 +103,4 @@ public class Style {
 	{
 		return "[" + indent + "," + color + "; " + fontSize + " on " + leading + "]";
 	}
-		/*
-	public Font getFont(float scale) {
-		return font.deriveFont(fontSize * scale);
-	}
-	*/
 }

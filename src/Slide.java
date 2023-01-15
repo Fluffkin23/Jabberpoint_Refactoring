@@ -13,51 +13,60 @@ import java.util.Vector;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-public class Slide {
+public class Slide
+{
 	public final static int WIDTH = 1200;
 	public final static int HEIGHT = 800;
 	protected String title; //The title is kept separately
 	protected Vector<SlideItem> items; //The SlideItems are kept in a vector
 
-	public Slide() {
+	public Slide()
+	{
 		//items = new Vector<SlideItem>();
-		items = new Vector<>();
+		this.items = new Vector<>();
 	}
 
 	//Add a SlideItem
-	public void append(SlideItem anItem) {
-		items.addElement(anItem);
+	public void append(SlideItem anItem)
+	{
+		this.items.addElement(anItem);
 	}
 
 	//Return the title of a slide
-	public String getTitle() {
-		return title;
+	public String getTitle()
+	{
+		return this.title;
 	}
 
 	//Change the title of a slide
-	public void setTitle(String newTitle) {
-		title = newTitle;
+	public void setTitle(String newTitle)
+	{
+		this.title = newTitle;
 	}
 
 	//Create a TextItem out of a String and add the TextItem
-	public void append(int level, String message) {
+	public void append(int level, String message)
+	{
 		append(new TextItem(level, message));
 	}
 
 	//Returns the SlideItem
-	public SlideItem getSlideItem(int number) {
+	public SlideItem getSlideItem(int number)
+	{
 		//return (SlideItem)items.elementAt(number);
-		return items.elementAt(number);
+		return this.items.elementAt(number);
 	}
 
 	//Return all the SlideItems in a vector
-	public Vector<SlideItem> getSlideItems() {
-		return items;
+	public Vector<SlideItem> getSlideItems()
+	{
+		return this.items;
 	}
 
 	//Returns the size of a slide
-	public int getSize() {
-		return items.size();
+	public int getSize()
+	{
+		return this.items.size();
 	}
 
 	//Draws what the slide actual contain.
