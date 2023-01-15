@@ -18,14 +18,15 @@ public class Style {
 	private static Style[] styles; // de styles
 	
 	private static final String FONTNAME = "Helvetica";
-	int indent;
-	Color color;
-	Font font;
-	int fontSize;
-	int leading;
+	private int indent;
+	private Color color;
+	private Font font;
+	private int fontSize;
+	private int leading;
 
+	/*
 	public static void createStyles() {
-		styles = new Style[5];    
+		styles = new Style[5];
 		// De styles zijn vast ingecodeerd.
 		styles[0] = new Style(0, Color.red,   48, 20);	// style voor item-level 0
 		styles[1] = new Style(20, Color.blue,  40, 10);	// style voor item-level 1
@@ -40,19 +41,62 @@ public class Style {
 		}
 		return styles[level];
 	}
-
-	public Style(int indent, Color color, int points, int leading) {
+*/
+	public Style(int indent, Color color, int points, int leading)
+	{
 		this.indent = indent;
 		this.color = color;
-		font = new Font(FONTNAME, Font.BOLD, fontSize=points);
+		this.font = new Font(FONTNAME, Font.BOLD, fontSize=points);
 		this.leading = leading;
 	}
+	public int getIndent() {
+		return indent;
+	}
 
-	public String toString() {
-		return "["+ indent + "," + color + "; " + fontSize + " on " + leading +"]";
+	public void setIndent(int indent) {
+		this.indent = indent;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
 	}
 
 	public Font getFont(float scale) {
 		return font.deriveFont(fontSize * scale);
 	}
+
+	public void setFont(Font font)
+	{
+		this.font = font;
+	}
+
+	public int getFontSize() {
+		return fontSize;
+	}
+
+	public void setFontSize(int fontSize) {
+		this.fontSize = fontSize;
+	}
+
+	public int getLeading() {
+		return leading;
+	}
+
+	public void setLeading(int leading) {
+		this.leading = leading;
+	}
+
+	public String toString()
+	{
+		return "[" + indent + "," + color + "; " + fontSize + " on " + leading + "]";
+	}
+		/*
+	public Font getFont(float scale) {
+		return font.deriveFont(fontSize * scale);
+	}
+	*/
 }
