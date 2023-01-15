@@ -34,40 +34,58 @@ public class SlideViewerComponent extends JComponent {
 	private static final int XPOS = 1100;
 	private static final int YPOS = 20;
 
-	public SlideViewerComponent(Presentation pres, JFrame frame) {
+	public SlideViewerComponent(Presentation pres, JFrame frame)
+	{
 		setBackground(BGCOLOR); 
 		presentation = pres;
 		labelFont = new Font(FONTNAME, FONTSTYLE, FONTHEIGHT);
 		this.frame = frame;
 	}
 
-	public Dimension getPreferredSize() {
+	public Dimension getPreferredSize()
+	{
 		return new Dimension(Slide.WIDTH, Slide.HEIGHT);
 	}
 
-	public void update(Presentation presentation, Slide data) {
-		if (data == null) {
-			repaint();
-			return;
+	public void update(Presentation presentation, Slide data)
+	{
+		if (data != null)
+		{
+			this.presentation = presentation;
+			this.slide = data;
+			frame.setTitle(presentation.getTitle());
 		}
-		this.presentation = presentation;
-		this.slide = data;
 		repaint();
-		frame.setTitle(presentation.getTitle());
 	}
 
 //Draw the slide
 	public void paintComponent(Graphics g) {
+
+		if (this.presentation.getSlideNumber() < 0 || this.slide == null)
+		{
+			return;
+			setGraphics(g);
+			Rectangle area = new Rectangle(0, YPOS, getWidth(), (getHeight() - YPOS));
+			slide.draw(g, area, this);
+		}
+		/*
+			g.setColor(BGCOLOR);
+			g.fillRect(0, 0, getSize().width, getSize().height);
+			g.setFont(labelFont);
+			g.setColor(COLOR);
+			g.drawString("Slide " + (1 + presentation.getSlideNumber()) + " of " +
+				   presentation.getSize(), XPOS, YPOS);
+		*/
+	}
+
+	private void setGraphics(Graphics g)
+	{
 		g.setColor(BGCOLOR);
 		g.fillRect(0, 0, getSize().width, getSize().height);
-		if (presentation.getSlideNumber() < 0 || slide == null) {
-			return;
-		}
 		g.setFont(labelFont);
 		g.setColor(COLOR);
-		g.drawString("Slide " + (1 + presentation.getSlideNumber()) + " of " +
-                 presentation.getSize(), XPOS, YPOS);
-		Rectangle area = new Rectangle(0, YPOS, getWidth(), (getHeight() - YPOS));
-		slide.draw(g, area, this);
+		int currentSlide = this.presentation.getSlideNumber();
+		int totalNumberOfSlides = this.presentation.getSize();
+		g.drawString("Slide " + (1 + currentSlide + " of " + totalNumberOfSlides), XPOS, YPOS);
 	}
 }
