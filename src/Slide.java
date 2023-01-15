@@ -58,23 +58,28 @@ public class Slide {
 		return items.size();
 	}
 
-	//Draws the slide
-	public void draw(Graphics g, Rectangle area, ImageObserver view) {
-		float scale = getScale(area);
-	    int y = area.y;
-	//The title is treated separately
-	    SlideItem slideItem = new TextItem(0, getTitle());
-	    Style style = Style.getStyle(slideItem.getLevel());
-	    slideItem.draw(area.x, y, scale, g, style, view);
-	    y += slideItem.getBoundingBox(g, view, scale, style).height;
-	    for (int number=0; number<getSize(); number++) {
-	      slideItem = (SlideItem)getSlideItems().elementAt(number);
-	      style = Style.getStyle(slideItem.getLevel());
-	      slideItem.draw(area.x, y, scale, g, style, view);
-	      y += slideItem.getBoundingBox(g, view, scale, style).height;
-	    }
-	  }
+	//Draws what the slide actual contain.
+	public void draw(Graphics g, Rectangle area, ImageObserver view)
+	{
+		int y = area.y;
 
+		//Here we will draw just the title
+		y+= drawBody(new TextItem(0,getTitle()), y, g, area, view);
+
+		//Drawing all others elements
+		for(int number = 0; number < this.getSize(); number ++)
+		{
+			y +=drawBody(getSlideItems().elementAt(number),y,g,area,view);
+		}
+	}
+
+	//draw the actual slide
+	private int drawBody(SlideItem slideItem, int y, Graphics g, Rectangle area,ImageObserver view)
+	{
+		Style style = Style.getStyle(slideItem.getLevel());
+		slideItem.draw(area.x,y,getScale(area),g,style,view);
+		return slideItem.getBoundingBox(g, view, getScale(area),style).height;
+	}
 	//Returns the scale to draw a slide
 	private float getScale(Rectangle area) {
 		return Math.min(((float)area.width) / ((float)WIDTH), ((float)area.height) / ((float)HEIGHT));
