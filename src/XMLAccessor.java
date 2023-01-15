@@ -25,7 +25,8 @@ import org.w3c.dom.NodeList;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
-public class XMLAccessor extends Accessor {
+public class XMLAccessor extends Accessor
+{
 	
     /** Default API to use. */
     protected static final String DEFAULT_API_TO_USE = "dom";
@@ -52,8 +53,10 @@ public class XMLAccessor extends Accessor {
     	return titles.item(0).getTextContent();
     }
 
-	public void loadFile(Presentation presentation, String filename) throws IOException
+	public void loadFile(Presentation presentation, String filename)
 	{
+		Element element = null;
+		/*
 		int slideNumber, itemNumber, totalSlides, maxItem;
 		try {
 
@@ -76,7 +79,12 @@ public class XMLAccessor extends Accessor {
 					loadSlideItem(slide, item);
 				}
 			}
-		} 
+		}
+		*/
+		try
+		{
+			element = documentBuilder(filename);
+		}
 		catch (IOException iox)
 		{
 			System.err.println(iox.toString());
@@ -88,7 +96,36 @@ public class XMLAccessor extends Accessor {
 		catch (ParserConfigurationException pcx)
 		{
 			System.err.println(PCE);
-		}	
+		}
+		if(element != null)
+
+			printSlideElements(presentation,element);
+	}
+	private void printSlideElements(Presentation presentation, Element element)
+	{
+		int slideNumber;
+		int maxItem;
+		int itemNumber;
+		int totalSlides;
+
+		presentation.setTitle(getTitle(element, SHOWTITLE));
+		NodeList slides = element.getElementsByTagName(SLIDE);
+
+		totalSlides = slides.getLength();
+		for(slideNumber = 0;slideNumber < totalSlides; slideNumber++)
+		{
+			Element xmlSlide = (Element) slides.item(slideNumber);
+			Slide slide = new Slide();
+			slide.setTitle(getTitle(xmlSlide, SLIDETITLE));
+			presentation.append(slide);
+			NodeList slideItems = xmlSlide.getElementsByTagName(ITEM);
+			maxItem = slideItems.getLength();
+			for(itemNumber = 0; itemNumber < maxItem; itemNumber++)
+			{
+				Element item = (Element) slideItems.item(itemNumber);
+				loadSlideItem(slide, item);
+			}
+		}
 	}
 
 	public Element documentBuilder(String filename) throws ParserConfigurationException, IOException,SAXException
@@ -98,9 +135,48 @@ public class XMLAccessor extends Accessor {
 		return document.getDocumentElement();
 	}
 
-	protected void loadSlideItem(Slide slide, Element item) {
-		int level = 1; // default
+	private int levelText(NamedNodeMap value)
+	{
+		String leveltext = value.getNamedItem(LEVEL).getTextContent();
+		if (leveltext != null)
+		{
+			try
+			{
+				return Integer.parseInt(leveltext);
+			} catch (NumberFormatException x)
+			{
+				System.err.println(NFE);
+			}
+		}
+		return 1;
+	}
+
+	private void appendTextItem(Slide slide, NamedNodeMap value,Element item, int level)
+	{
+		String type = value.getNamedItem(KIND).getTextContent();
+		if (TEXT.equals(type))
+		{
+			slide.append(new TextItem(level, item.getTextContent()));
+		}
+		else
+		{
+			if (IMAGE.equals(type))
+			{
+				slide.append(new BitmapItem(level, item.getTextContent()));
+			}
+			else
+			{
+				System.err.println(UNKNOWNTYPE);
+			}
+		}
+	}
+
+	protected void loadSlideItem(Slide slide, Element item)
+	{
 		NamedNodeMap attributes = item.getAttributes();
+		int level = this.levelText(attributes);
+		this.appendTextItem(slide,attributes,item,level);
+		/*
 		String leveltext = attributes.getNamedItem(LEVEL).getTextContent();
 		if (leveltext != null)
 		{
@@ -129,7 +205,9 @@ public class XMLAccessor extends Accessor {
 				System.err.println(UNKNOWNTYPE);
 			}
 		}
+		 */
 	}
+
 	public void saveFile(Presentation presentation, String filename) throws IOException
 	{
 		PrintWriter out = new PrintWriter(new FileWriter(filename));
