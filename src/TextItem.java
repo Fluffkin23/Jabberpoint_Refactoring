@@ -25,14 +25,14 @@ import java.util.ArrayList;
  */
 
 public class TextItem extends SlideItem {
-	private String text;
+	private final String text;
 	
 	private static final String EMPTYTEXT = "No Text Given";
 
 //A textitem of int level with text string
 	public TextItem(int level, String string) {
 		super(level);
-		text = string;
+		this.text = string;
 	}
 
 //An empty textitem
@@ -42,13 +42,13 @@ public class TextItem extends SlideItem {
 
 //Returns the text
 	public String getText() {
-		return text == null ? "" : text;
+		return this.text == null ? "" : this.text;
 	}
 
 //Returns the AttributedString for the Item
 	public AttributedString getAttributedString(Style style, float scale) {
 		AttributedString attrStr = new AttributedString(getText());
-		attrStr.addAttribute(TextAttribute.FONT, style.getFont(scale), 0, text.length());
+		attrStr.addAttribute(TextAttribute.FONT, style.getFont(scale), 0, this.text.length());
 		return attrStr;
 	}
 
@@ -73,14 +73,17 @@ public class TextItem extends SlideItem {
 	}
 
 //Draws the item
-	public void draw(int x, int y, float scale, Graphics g, 
-			Style myStyle, ImageObserver o) {
-		if (text == null || text.length() == 0) {
+	public void draw(int x, int y, float scale, Graphics g,
+			Style myStyle, ImageObserver o)
+	{
+		if (this.text == null || this.text.length() == 0) {
 			return;
 		}
+
 		List<TextLayout> layouts = getLayouts(g, myStyle, scale);
 		Point pen = new Point(x + (int)(myStyle.getIndent() * scale),
 				y + (int) (myStyle.getLeading() * scale));
+
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setColor(myStyle.getColor());
 		Iterator<TextLayout> it = layouts.iterator();
@@ -92,14 +95,16 @@ public class TextItem extends SlideItem {
 		}
 	  }
 
-	private List<TextLayout> getLayouts(Graphics g, Style s, float scale) {
+	private List<TextLayout> getLayouts(Graphics g, Style s, float scale)
+	{
 		List<TextLayout> layouts = new ArrayList<TextLayout>();
 		AttributedString attrStr = getAttributedString(s, scale);
     	Graphics2D g2d = (Graphics2D) g;
     	FontRenderContext frc = g2d.getFontRenderContext();
     	LineBreakMeasurer measurer = new LineBreakMeasurer(attrStr.getIterator(), frc);
     	float wrappingWidth = (Slide.WIDTH - s.getIndent()) * scale;
-    	while (measurer.getPosition() < getText().length()) {
+    	while (measurer.getPosition() < getText().length())
+		{
     		TextLayout layout = measurer.nextLayout(wrappingWidth);
     		layouts.add(layout);
     	}
