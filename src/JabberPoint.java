@@ -1,4 +1,8 @@
-import javax.swing.JOptionPane;
+import Demo.DemoPresentation;
+import Presentation.Presentation;
+import Slide.SlideViewerFrame;
+import Presentation.CreateStyles;
+import XML_file.Reader.XMLReader;
 
 import java.io.IOException;
 
@@ -16,25 +20,35 @@ import java.io.IOException;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
+
+
+
 public class JabberPoint {
 
+	// Version of the program
 	protected static final String JABVERSION = "Jabberpoint 1.6 - OU version";
 
 	/** The main program */
 	public static void main(String[] argv)
 	{
-		//Style.createStyles();
-		CreateStyles.createStyles();
-		Presentation presentation = new Presentation();
-		new SlideViewerFrame(JABVERSION, presentation);
-			if (argv.length == 0)
+
+		CreateStyles.createStyles(); // Initialize the styles used for the presentation
+		Presentation presentation = new Presentation();        // Create a new Presentation object
+		DemoPresentation demoPresentation = new DemoPresentation(); // Create a new DemoPresentation object
+		XMLReader reader = new XMLReader();// Create a new XMLReader object
+		new SlideViewerFrame(JABVERSION, presentation); // Create a new SlideViewerFrame object and display it
+			if (argv.length == 0) // Check if any command line arguments were passed
 			{
-				Accessor.loadDemoPresentation(presentation);
+				demoPresentation.loadFile(presentation); // Load the demo presentation into the Presentation object
 			}
 			else
 			{
-				new XMLAccessor().loadFile(presentation, argv[0]);
+				try {
+					reader.loadFile(presentation, argv[0]);  // Load the presentation file specified by the first command line argument into the Presentation object
+				} catch (IOException e) {
+					throw new RuntimeException(e); // If there is an error loading the file, throw a RuntimeException
+				}
 			}
-			presentation.setSlideNumber(0);
+			presentation.setSlideNumber(0); // Set the slide number to zero
 	}
 }
